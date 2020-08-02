@@ -89,16 +89,11 @@ exports.signin = (req, res) => {
         });
       }
 
-      console.log('user :>> ', user);
       var token = jwt.sign({ id: user._id, level: user.level }, JWT_SECRET, {
         expiresIn: '1d' // 24 hours
       });
 
-      var authorities = [];
-
-      for (let i = 0; i < user.roles.length; i++) {
-        authorities.push("ROLE_" + user.roles[i].name.toUpperCase());
-      }
+      const authorities = user.roles.map(role => `ROLE_${role.name.toUpperCase()}`);
       res.status(200).send({
         id: user._id,
         username: user.username,
@@ -107,4 +102,25 @@ exports.signin = (req, res) => {
         accessToken: token
       });
     });
+};
+
+exports.autoupdate = (req, res) => {
+  User.findById(req.userId)
+  .populate("roles", "-__v")
+  .exec((err, user) => {
+    if (err) {
+      res.status(500).send({ message: err });
+      return;
+    }
+    if (!user) {
+      return res.status(404).send({ message: "User Not found." });
+    }
+    const authorities = user.roles.map(role => `ROLE_${role.name.toUpperCase()}`);
+    res.status(200).send({
+      id: user._id,
+      username: user.username,
+      level: user.level,
+      roles: authorities
+    });
+  })
 };

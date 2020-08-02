@@ -2,7 +2,7 @@ var createError = require('http-errors');
 const db = require('../models');
 const {Library} = db.models;
 
-exports.getAll = (req, res) => {
+exports.getAll = (req, res, next) => {
     const {query, userLevel} = req;
     const body = query.type ? {type: query.type} : {};
     Library.find(body).exec()
@@ -15,11 +15,11 @@ exports.getAll = (req, res) => {
         })
 }
 
-exports.getById = (req, res) => {
+exports.getById = (req, res, next) => {
     const { userLevel } = req;
     Library.findById(req.params.id)
     .then(data => {
-        res.send(data);
+        res.send(filterLibraryItem(data, userLevel));
     })
     .catch(err => {
         console.log('err :', err);
@@ -32,10 +32,8 @@ filterLibraryData = (data, level) => {
 }
 
 filterLibraryItem = (item, level) => {
-    console.log('level :>> ', level);
-    console.log('item :>> ', item);
     const sensitiveRegexp = /\((\d),([^)]+)\)/g;
-    const result = Object.fromEntries(Object.entries(item.data).map(([key, value]) => {
+    const data = Object.fromEntries(Object.entries(item.data).map(([key, value]) => {
         const matches = [...value.matchAll(sensitiveRegexp)];
         console.log('matches :>> ', matches);
         let text = value;
@@ -44,6 +42,9 @@ filterLibraryItem = (item, level) => {
         })
         return [key, text];
     }));
-    console.log('result :>> ', result);
-    return result;
+    const response = {
+        ...item._doc,
+        data
+    }
+    return response;
 }
