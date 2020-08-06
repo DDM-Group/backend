@@ -1,18 +1,18 @@
-var express = require('express');
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+
+let express = require('express');
+const createError = require('http-errors');
+express = require('express');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
 const cors = require('cors');
 
-var app = express();
+const app = express();
 
-var corsOptions = {
+const corsOptions = {
     origin: "http://localhost:3000"
-  };
+};
 
-app.use(logger('dev'));
 app.use(cors(corsOptions))
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));

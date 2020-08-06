@@ -1,4 +1,4 @@
-var createError = require('http-errors');
+const createError = require('http-errors');
 const db = require('../models');
 const {Library} = db.models;
 

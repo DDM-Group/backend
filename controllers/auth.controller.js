@@ -3,8 +3,8 @@ const db = require("../models");
 const { User, Role } = db.models;
 const { JWT_SECRET } = process.env;
 
-var jwt = require("jsonwebtoken");
-var bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcryptjs");
 
 exports.signup = (req, res) => {
   const user = new User({
@@ -89,7 +89,7 @@ exports.signin = (req, res) => {
         });
       }
 
-      var token = jwt.sign({ id: user._id, level: user.level }, JWT_SECRET, {
+      const token = jwt.sign({id: user._id, level: user.level}, JWT_SECRET, {
         expiresIn: '1d' // 24 hours
       });
 
