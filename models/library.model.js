@@ -3,12 +3,9 @@ const librarySchema = new mongoose.Schema({
   name: {
     type: String
   },
-  type: {
-      type: String
-  },
-  data: {
-      type: Object
-  }
+  type: String,
+  photo: String,
+  data: Object
 });
 
 const Library = mongoose.model('Library', librarySchema);
