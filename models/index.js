@@ -2,12 +2,14 @@ const mongoose = require('mongoose');
 const Library = require('./library.model');
 const User = require('./user.model');
 const Role = require('./role.model');
+const MasterClass = require('./masterclass.model');
 const ROLES = ['user', 'admin', 'moderator'];
 
 const connect = () => {
   return mongoose.connect(process.env.DATABASE_URL, {
     useNewUrlParser: true,
-    useUnifiedTopology: true
+    useUnifiedTopology: true,
+    useFindAndModify: false
   })
   .then(() => {
     console.log("Successfully connect to MongoDB.");
@@ -19,7 +21,7 @@ const connect = () => {
   });
 };
 
-const models = { Library, User, Role };
+const models = { Library, User, Role, MasterClass };
 module.exports = {
   models,
   connect,
