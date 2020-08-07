@@ -15,6 +15,8 @@ exports.getAll = (req, res, next) => {
 
 exports.getById = (req, res, next) => {
     MasterClass.findById(req.params.id)
+    .populate("students")
+    .exec()
     .then(data => {
         res.send(data);
     })
@@ -26,7 +28,7 @@ exports.getById = (req, res, next) => {
 
 exports.register = async (req, res, next) => {
     try {
-        const masterclass = await MasterClass.findById(req.params.id).populate("students", "-__v")
+        const masterclass = await MasterClass.findById(req.params.id).populate("students")
         if (masterclass.students.length >= masterclass.max_students) {
             return res.status(409).send({ message: "Превышен лимит записавшихся" });
         }

@@ -97,6 +97,9 @@ exports.signin = (req, res) => {
       res.status(200).send({
         id: user._id,
         username: user.username,
+        name: user.name,
+        group: user.group,
+        photo: user.photo,
         level: user.level,
         roles: authorities,
         accessToken: token
@@ -119,6 +122,9 @@ exports.autoupdate = (req, res) => {
     res.status(200).send({
       id: user._id,
       username: user.username,
+      name: user.name,
+      group: user.group,
+      photo: user.photo,
       level: user.level,
       roles: authorities
     });
