@@ -1,9 +1,9 @@
 var createError = require('http-errors');
 const db = require('../models');
-const {MasterClass} = db.models;
+const {Operation} = db.models;
 
 exports.getAll = (req, res, next) => {
-    MasterClass.find({}).populate("students").exec()
+    Operation.find({}).populate("users").exec()
         .then(data => {
             res.send(data);
         })
@@ -14,8 +14,8 @@ exports.getAll = (req, res, next) => {
 }
 
 exports.getById = (req, res, next) => {
-    MasterClass.findById(req.params.id)
-    .populate("students")
+    Operation.findById(req.params.id)
+    .populate("users")
     .exec()
     .then(data => {
         res.send(data);
@@ -28,14 +28,11 @@ exports.getById = (req, res, next) => {
 
 exports.register = async (req, res, next) => {
     try {
-        const masterclass = await MasterClass.findById(req.params.id).populate("students")
-        if (masterclass.students.length >= masterclass.max_students) {
-            return res.status(409).send({ message: "Превышен лимит записавшихся" });
-        }
-        if (masterclass.students.findIndex(student => student.id === req.userId) !== -1) {
+        const operation = await Operation.findById(req.params.id).populate("users").exec()
+        if (operation.users.findIndex(user => user.id === req.userId) !== -1) {
             return res.status(409).send({ message: "Пользователь уже записан" });
         }
-        const result = await MasterClass.findByIdAndUpdate(req.params.id, { $push: { students: req.userId}}, {new: true})
+        const result = await (await Operation.findByIdAndUpdate(req.params.id, { $push: { users: req.userId}}, {new: true}))
         return res.status(201).send(result);
     } catch (err)  {
         console.log('err :', err);
