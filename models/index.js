@@ -3,6 +3,7 @@ const Library = require('./library.model');
 const User = require('./user.model');
 const Role = require('./role.model');
 const MasterClass = require('./masterclass.model');
+const Operation = require('./operation.model');
 const ROLES = ['user', 'admin', 'moderator'];
 
 const connect = () => {
@@ -21,7 +22,7 @@ const connect = () => {
   });
 };
 
-const models = { Library, User, Role, MasterClass };
+const models = { Library, User, Role, MasterClass, Operation };
 module.exports = {
   models,
   connect,
@@ -29,6 +30,7 @@ module.exports = {
 }
 
 function initial() {
+  //TODO: сделать автодеплой из папки с данными на случай миграции с сервера на сервер
   Role.estimatedDocumentCount((err, count) => {
     if (!err && count === 0) {
       new Role({
