@@ -9,6 +9,10 @@ const User = mongoose.model(
     name: String,
     group: String,
     level: Number,
+    alive: Boolean,
+    active: Boolean,
+    lives: Number,
+    gif: String,
     roles: [
       {
         type: mongoose.Schema.Types.ObjectId,
