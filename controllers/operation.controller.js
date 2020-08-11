@@ -3,28 +3,26 @@ const moment = require('moment');
 const db = require('../models');
 const {Operation} = db.models;
 
-exports.getAll = (req, res, next) => {
-    Operation.find({}).populate("users").exec()
-        .then(data => {
-            res.send(data);
-        })
-        .catch(err => {
-            console.log('err :', err);
-            next(createError(503, err))
-        })
+exports.getAll = async (req, res, next) => {
+    try {
+        const operations = await Operation
+          .find({}).populate("users").exec()
+        res.send(operations)
+    } catch (err) {
+        console.error(err)
+        next(createError(503, err))
+    }
 }
 
-exports.getById = (req, res, next) => {
-    Operation.findById(req.params.id)
-    .populate("users")
-    .exec()
-    .then(data => {
-        res.send(data);
-    })
-    .catch(err => {
-        console.log('err :', err);
+exports.getById = async (req, res, next) => {
+    try {
+        const operation = Operation.findById(req.params.id)
+          .populate("users").exec()
+          res.send(operation)
+    } catch (err) {
+        console.error(err);
         next(createError(503, err))
-    })
+    }
 }
 
 exports.register = async (req, res, next) => {

@@ -10,19 +10,13 @@ module.exports = function(app) {
     next();
   });
 
-  app.get("/api/test/all", controller.allAccess);
+  app.get("/user/activate", [authJwt.verifyToken, authJwt.isAdmin], controller.activateAll);
+  app.get("/user/kill", [authJwt.verifyToken, authJwt.isAdmin], controller.killAll);
+  app.get("/user/heal", [authJwt.verifyToken, authJwt.isAdmin], controller.healAll);
 
-  app.get("/api/test/user", [authJwt.verifyToken], controller.userBoard);
+  app.get("/user/:id", controller.qr);
+  app.get("/user/:id/activate", [authJwt.verifyToken, authJwt.isAdmin], controller.activate);
+  app.get("/user/:id/kill", [authJwt.verifyToken, authJwt.isAdmin], controller.kill);
+  app.get("/user/:id/heal", [authJwt.verifyToken, authJwt.isAdmin], controller.heal);
 
-  app.get(
-    "/api/test/mod",
-    [authJwt.verifyToken, authJwt.isModerator],
-    controller.moderatorBoard
-  );
-
-  app.get(
-    "/api/test/admin",
-    [authJwt.verifyToken, authJwt.isAdmin],
-    controller.adminBoard
-  );
 };
