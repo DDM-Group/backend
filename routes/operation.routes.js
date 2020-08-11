@@ -10,6 +10,8 @@ module.exports = function(app) {
       next();
     });
   
+    app.get("/operation/view", controller.getView);
+    
     app.get("/operation", [authJwt.verifyToken], controller.getAll);
   
     app.get("/operation/:id", [authJwt.verifyToken], controller.getById);
