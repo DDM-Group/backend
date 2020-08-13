@@ -13,9 +13,10 @@ const connect = () => {
     useUnifiedTopology: true,
     useFindAndModify: false
   })
-  .then(() => {
+  .then((mongooseDb) => {
     console.log("Successfully connect to MongoDB.");
     initial();
+    return mongooseDb
   })
   .catch(err => {
     console.error("Connection error", err);
