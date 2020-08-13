@@ -101,6 +101,7 @@ exports.signin = (req, res) => {
         group: user.group,
         photo: user.photo,
         level: user.level,
+        experience: user.experience,
         roles: authorities,
         accessToken: token
       });
@@ -126,6 +127,7 @@ exports.autoupdate = (req, res) => {
       group: user.group,
       photo: user.photo,
       level: user.level,
+      experience: user.experience,
       roles: authorities
     });
   })

@@ -4,6 +4,7 @@ const User = require('./user.model');
 const Role = require('./role.model');
 const MasterClass = require('./masterclass.model');
 const Operation = require('./operation.model');
+const Exam = require('./exam.model');
 const ROLES = ['user', 'admin', 'moderator'];
 
 const connect = () => {
@@ -22,7 +23,7 @@ const connect = () => {
   });
 };
 
-const models = { Library, User, Role, MasterClass, Operation };
+const models = { Library, User, Role, MasterClass, Operation, Exam };
 module.exports = {
   models,
   connect,

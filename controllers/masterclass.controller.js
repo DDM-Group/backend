@@ -2,28 +2,41 @@ var createError = require('http-errors');
 const db = require('../models');
 const {MasterClass} = db.models;
 
-exports.getAll = (req, res, next) => {
-    MasterClass.find({}).populate("students").exec()
-        .then(data => {
-            res.send(data);
-        })
-        .catch(err => {
-            console.log('err :', err);
-            next(createError(503, err))
-        })
+exports.getAll = async (req, res, next) => {
+    try {
+        const masterclasses = await MasterClass
+          .find({})
+          .populate("students")
+          .exec()
+        res.send(masterclasses)
+    } catch (err) {
+        console.error(err);
+        next(createError(503, err))
+    }
 }
 
-exports.getById = (req, res, next) => {
-    MasterClass.findById(req.params.id)
-    .populate("students")
-    .exec()
-    .then(data => {
-        res.send(data);
-    })
-    .catch(err => {
-        console.log('err :', err);
+exports.getById = async (req, res, next) => {
+    try {
+        const masterclass = await MasterClass
+          .findById(req.params.id)
+          .populate("students")
+          .exec()
+        res.send(data)
+    } catch (err) {
+        console.error(err);
         next(createError(503, err))
-    })
+    }
+}
+
+exports.getForUser = async (req, res, next) => {
+    try {
+        const operations = await MasterClass
+          .find({ students: { $elemMatch: { $eq: req.params.id }}}).populate("users").exec()
+        res.send(operations)
+    } catch (err) {
+        console.error(err)
+        next(createError(503, err))
+    }
 }
 
 exports.register = async (req, res, next) => {

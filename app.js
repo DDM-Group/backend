@@ -24,6 +24,7 @@ require('./routes/user.routes')(app);
 require('./routes/library.routes')(app);
 require('./routes/masterclass.routes')(app);
 require('./routes/operation.routes')(app);
+require('./routes/exam.routes')(app);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
