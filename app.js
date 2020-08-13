@@ -22,6 +22,8 @@ app.use(express.static(path.join(__dirname, './public')));
 require('./routes/auth.routes')(app);
 require('./routes/user.routes')(app);
 require('./routes/library.routes')(app);
+require('./routes/scoutingInfo.routes')(app);
+require('./routes/scoutingRequest.routes')(app);
 require('./routes/masterclass.routes')(app);
 require('./routes/operation.routes')(app);
 require('./routes/exam.routes')(app);
