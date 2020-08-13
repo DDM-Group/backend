@@ -9,6 +9,7 @@ const User = mongoose.model(
     name: String,
     group: String,
     level: Number,
+    experience: Number,
     alive: Boolean,
     active: Boolean,
     lives: Number,

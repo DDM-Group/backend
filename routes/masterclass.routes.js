@@ -10,6 +10,8 @@ module.exports = function(app) {
       next();
     });
   
+    app.get("/masterclass/user/:id", [authJwt.verifyToken], controller.getForUser);
+
     app.get("/masterclass", [authJwt.verifyToken], controller.getAll);
   
     app.get("/masterclass/:id", [authJwt.verifyToken], controller.getById);

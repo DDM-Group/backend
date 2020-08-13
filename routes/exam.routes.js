@@ -1,5 +1,5 @@
 const { authJwt } = require("../middlewares");
-const controller = require("../controllers/library.controller");
+const controller = require("../controllers/exam.controller");
 
 module.exports = function(app) {
     app.use(function(req, res, next) {
@@ -9,9 +9,6 @@ module.exports = function(app) {
       );
       next();
     });
-  
-    app.get("/library", controller.getAll);
-  
-    app.get("/library/:id", controller.getById);
-  };
 
+    app.get("/exam/user/:id", [authJwt.verifyToken], controller.getForUser);
+}

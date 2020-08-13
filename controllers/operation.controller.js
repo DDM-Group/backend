@@ -25,6 +25,17 @@ exports.getById = async (req, res, next) => {
     }
 }
 
+exports.getForUser = async (req, res, next) => {
+    try {
+        const operations = await Operation
+          .find({ users: { $elemMatch: { $eq: req.params.id }}}).populate("users").exec()
+        res.send(operations)
+    } catch (err) {
+        console.error(err)
+        next(createError(503, err))
+    }
+}
+
 exports.register = async (req, res, next) => {
     try {
         const operation = await Operation.findById(req.params.id).populate("users").exec()

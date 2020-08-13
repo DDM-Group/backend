@@ -11,6 +11,8 @@ module.exports = function(app) {
     });
   
     app.get("/operation/view", controller.getView);
+
+    app.get("/operation/user/:id", [authJwt.verifyToken], controller.getForUser);
     
     app.get("/operation", [authJwt.verifyToken], controller.getAll);
   
