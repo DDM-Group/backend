@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
 const Library = require('./library.model');
+const ScoutingInfo = require('./scoutingInfo.model');
+const ScoutingRequest = require('./scoutingRequest');
 const User = require('./user.model');
 const Role = require('./role.model');
 const MasterClass = require('./masterclass.model');
@@ -24,7 +26,7 @@ const connect = () => {
   });
 };
 
-const models = { Library, User, Role, MasterClass, Operation, Exam };
+const models = { Library, ScoutingInfo, ScoutingRequest, User, Role, MasterClass, Operation, Exam };
 module.exports = {
   models,
   connect,
