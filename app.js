@@ -6,6 +6,7 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const cors = require('cors');
+const multer = require("multer");
 
 module.exports = function(mongoose) {
     const app = express();
@@ -21,7 +22,8 @@ module.exports = function(mongoose) {
     app.use(express.static(path.join(__dirname, './public')));
     
     require('./adminBro')(app, mongoose);
-    
+
+    require('./routes/image.routes')(app);
     require('./routes/auth.routes')(app);
     require('./routes/user.routes')(app);
     require('./routes/library.routes')(app);
