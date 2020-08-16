@@ -8,14 +8,20 @@ const {
     before: uploadBeforeHook,
   } = require('./actions/upload-image.hook');
 
-const photoOptions = {
+const additionalOptions = {
     properties: {
         uploadImage: {
-            components: {
-              edit: AdminBro.bundle('./components/upload-image.edit.jsx')
-            },
-            isVisible: { edit: true, list: false, filter: false, show: false}
+          components: {
+            edit: AdminBro.bundle('./components/upload-image.edit.jsx')
+          },
+          isVisible: { edit: true, list: false, filter: false, show: false}
+        },
+        data: {
+          components: {
+            edit: AdminBro.bundle('./components/change-data.edit.jsx')
           }
+        },
+        isVisible: { edit: true, list: false, filter: false, show: false}
     },
     actions: {
         new: {
@@ -44,11 +50,11 @@ module.exports = function (app, mongoose) {
         databases: [mongoose],
         rootPath: '/admin',
         resources: [
-            { resource: Library, options: photoOptions},
-            { resource: User, options: photoOptions},
+            { resource: Library, options: additionalOptions},
+            { resource: User, options: additionalOptions},
             { resource: Role, options: {}},
-            { resource: MasterClass, options: photoOptions},
-            { resource: Operation, options: photoOptions},
+            { resource: MasterClass, options: additionalOptions},
+            { resource: Operation, options: additionalOptions},
             { resource: Exam, options: {}},
         ],
         locale: {

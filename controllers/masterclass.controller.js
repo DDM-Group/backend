@@ -5,7 +5,7 @@ const {MasterClass} = db.models;
 exports.getAll = async (req, res, next) => {
     try {
         const masterclasses = await MasterClass
-          .find({})
+          .find({isVisible: true})
           .populate("students")
           .exec()
         res.send(masterclasses)

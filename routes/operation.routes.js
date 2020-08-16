@@ -10,7 +10,7 @@ module.exports = function(app) {
       next();
     });
   
-    app.get("/operation/view", controller.getView);
+    app.get("/operation/view", [authJwt.accessAll], controller.getView);
 
     app.get("/operation/user/:id", [authJwt.verifyToken], controller.getForUser);
     

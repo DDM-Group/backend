@@ -88,7 +88,6 @@ exports.signin = (req, res) => {
           message: "Invalid Password!"
         });
       }
-
       const token = jwt.sign({id: user._id, level: user.level}, JWT_SECRET, {
         expiresIn: '1d' // 24 hours
       });

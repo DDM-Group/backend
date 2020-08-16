@@ -5,6 +5,7 @@ const librarySchema = new mongoose.Schema({
   },
   type: String,
   photo: String,
+  isVisible: Boolean,
   data: Object
 });
 

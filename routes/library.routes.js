@@ -10,8 +10,8 @@ module.exports = function(app) {
       next();
     });
   
-    app.get("/library", controller.getAll);
+    app.get("/library", [authJwt.accessAll], controller.getAll);
   
-    app.get("/library/:id", controller.getById);
+    app.get("/library/:id", [authJwt.accessAll], controller.getById);
   };
 

@@ -1,14 +1,9 @@
 const mongoose = require('mongoose');
 const scoutingSchema = new mongoose.Schema({
-    name: {
-        type: String
-    },
-    level: {
-        type: Number
-    },
-    data: {
-        type: Object
-    },
+    name: String,
+    level: Number,
+    data: Object,
+    isVisible: Boolean,
     requestedBy: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'

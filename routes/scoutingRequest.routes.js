@@ -1,4 +1,4 @@
-const {authJwt} = require('../middlewares');
+const { authJwt } = require('../middlewares');
 const controller = require('../controllers/scoutingRequest.controller')
 
 module.exports = function (app) {

@@ -5,6 +5,7 @@ const examSchema = new mongoose.Schema({
   photo: String,
   data: Object,
   level: Number,
+  isVisible: Boolean,
   students: [
     {
       type: mongoose.Schema.Types.ObjectId,
