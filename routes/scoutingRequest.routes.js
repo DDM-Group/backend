@@ -11,4 +11,5 @@ module.exports = function (app) {
     });
 
     app.get('/scoutingRequest', [authJwt.verifyToken], controller.getAll)
+    app.post('/scoutingRequest', [authJwt.verifyToken], controller.register)
 };
