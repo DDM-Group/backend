@@ -4,7 +4,12 @@ const {Library} = db.models;
 
 exports.getAll = (req, res, next) => {
     const {query, userLevel} = req;
-    const body = query.type ? {type: query.type} : {}
+    const body = query.type ? {
+        type: query.type,
+        isVisible: true
+    } : {
+        isVisible: true
+    }
     Library.find(body).exec()
         .then(data => {
             res.send(filterLibraryData(data, userLevel));
@@ -32,6 +37,8 @@ filterLibraryData = (data, level) => {
 }
 
 filterLibraryItem = (item, level) => {
+    console.log('level :>> ', level);
+    console.log('item :>> ', item);
     const sensitiveRegexp = /\((\d),([^)]+)\)/g;
     const data = Object.fromEntries(Object.entries(item.data).map(([key, value]) => {
         const matches = [...value.matchAll(sensitiveRegexp)];
@@ -42,6 +49,7 @@ filterLibraryItem = (item, level) => {
         })
         return [key, text];
     }));
+    console.log('data :>> ', data);
     const response = {
         ...item._doc,
         data

@@ -8,7 +8,6 @@ const Edit = (props) => {
     onChange(property.name, files[0])
   }
 
-  console.log('record :>> ', record);
   const uploadedPhoto = record.params.photo
   const photoToUpload = record.params[property.name]
 

@@ -3,6 +3,7 @@ const masterClassSchema = new mongoose.Schema({
   name: String,
   type: String,
   photo: String,
+  isVisible: Boolean,
   data: Object,
   level: Number,
   date: Date,

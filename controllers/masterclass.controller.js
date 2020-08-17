@@ -5,7 +5,7 @@ const {MasterClass} = db.models;
 exports.getAll = async (req, res, next) => {
     try {
         const masterclasses = await MasterClass
-          .find({})
+          .find({isVisible: true})
           .populate("students")
           .exec()
         res.send(masterclasses)
@@ -22,6 +22,30 @@ exports.getById = async (req, res, next) => {
           .populate("students")
           .exec()
         res.send(data)
+    } catch (err) {
+        console.error(err);
+        next(createError(503, err))
+    }
+}
+
+
+exports.getMapped = async (req, res, next) => {
+    try {
+        const masterclasses = await MasterClass
+            .find({isVisible: true})
+            .populate("students")
+            .exec()
+        
+        const mappedMC = masterclasses.reduce((acc, mc) => {
+            if (!acc[mc.name]) {
+                acc[mc.name] = [mc]
+            } else {
+                acc[mc.name].push(mc)
+            }
+            return acc
+        }, {})
+        console.log('mappedMC :>> ', mappedMC);
+        res.send(mappedMC)
     } catch (err) {
         console.error(err);
         next(createError(503, err))

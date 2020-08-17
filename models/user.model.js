@@ -6,6 +6,7 @@ const User = mongoose.model(
     username: String,
     password: String,
     photo: String,
+    isVisible: Boolean,
     name: String,
     group: String,
     level: Number,

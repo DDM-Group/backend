@@ -5,7 +5,12 @@ const moment = require('moment')
 
 exports.getAll = (req, res, next) => {
     const {query, userLevel} = req;
-    const body = query.type ? {type: query.type} : {}
+    const body = query.type ? {
+        type: query.type,
+        isVisible: true
+    } : {
+        isVisible: true
+    }
     ScoutingRequest.find(body).exec()
         .then(data => {
             res.send(data);

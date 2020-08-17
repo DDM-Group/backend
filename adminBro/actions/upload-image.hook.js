@@ -6,8 +6,6 @@ const AdminBro = require('admin-bro');
 /** @type {AdminBro.After<AdminBro.ActionResponse>} */
 const after = async (response, request, context) => {
   const { record, uploadImage } = context;
-  console.log('record :>> ', record);
-  console.log('uploadImage :>> ', uploadImage);
   if (record.isValid() && uploadImage) {
     const filePath = `public/images/${uploadImage.name}`;
     await fs.promises.mkdir(path.dirname(filePath), { recursive: true });
@@ -21,7 +19,6 @@ const after = async (response, request, context) => {
 
 /** @type {AdminBro.Before} */
 const before = async (request, context) => {
-  console.log('context :>> ', context);
   if (request.method === 'post') {
     const { uploadImage, ...otherParams } = request.payload;
 

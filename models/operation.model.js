@@ -4,6 +4,7 @@ const operationSchema = new mongoose.Schema({
   photo: String,
   data: Object,
   level: Number,
+  isVisible: Boolean,
   date: Date,
   manager: {
     type: mongoose.Schema.Types.ObjectId,

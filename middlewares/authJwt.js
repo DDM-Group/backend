@@ -3,6 +3,25 @@ const db = require("../models");
 const { User, Role } = db.models;
 const JWT_SECRET = process.env.JWT_SECRET;
 
+accessAll = (req, res, next) => {
+  let token = req.headers["x-access-token"];
+  if (!token) {
+    req.userId = 'unauthorized';
+    req.userLevel = 0;
+    next();
+  } else {
+    console.log('token :>> ', JSON.stringify(token));
+    jwt.verify(token, JWT_SECRET, (err, decoded) => {
+      if (err) {
+        return res.status(401).send({ message: "Unauthorized!" });
+      }
+      req.userId = decoded.id;
+      req.userLevel = decoded.level || 0;
+      next();
+    });
+  }
+}
+
 verifyToken = (req, res, next) => {
   let token = req.headers["x-access-token"];
 
@@ -15,7 +34,7 @@ verifyToken = (req, res, next) => {
       return res.status(401).send({ message: "Unauthorized!" });
     }
     req.userId = decoded.id;
-    req.userLevel = decoded.level;
+    req.userLevel = decoded.level || 0;
     next();
   });
 };
@@ -83,6 +102,7 @@ isModerator = (req, res, next) => {
 };
 
 const authJwt = {
+  accessAll,
   verifyToken,
   isAdmin,
   isModerator
