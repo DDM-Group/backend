@@ -28,6 +28,30 @@ exports.getById = async (req, res, next) => {
     }
 }
 
+
+exports.getMapped = async (req, res, next) => {
+    try {
+        const masterclasses = await MasterClass
+            .find({isVisible: true})
+            .populate("students")
+            .exec()
+        
+        const mappedMC = masterclasses.reduce((acc, mc) => {
+            if (!acc[mc.name]) {
+                acc[mc.name] = [mc]
+            } else {
+                acc[mc.name].push(mc)
+            }
+            return acc
+        }, {})
+        console.log('mappedMC :>> ', mappedMC);
+        res.send(mappedMC)
+    } catch (err) {
+        console.error(err);
+        next(createError(503, err))
+    }
+}
+
 exports.getForUser = async (req, res, next) => {
     try {
         const operations = await MasterClass

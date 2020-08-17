@@ -1,6 +1,6 @@
 const createError = require('http-errors');
 const db = require("../models");
-const { User, Role } = db.models;
+const { User, Role, Operation } = db.models;
 
 exports.qr = async (req, res, next) => {
     try {
@@ -21,7 +21,7 @@ exports.qr = async (req, res, next) => {
     }
 };
 
-exports.activate = async (req, res) => {
+exports.activate = async (req, res, next) => {
     try {
         const user = await User.findById(req.params.id)
         user.active = true
@@ -33,7 +33,7 @@ exports.activate = async (req, res) => {
     }
 };
 
-exports.kill = async (req, res) => {
+exports.kill = async (req, res, next) => {
     try {
         const user = await User.findById(req.params.id)
         user.alive = false
@@ -45,7 +45,7 @@ exports.kill = async (req, res) => {
     }
 };
 
-exports.heal = async (req, res) => {
+exports.heal = async (req, res, next) => {
     try {
         const user = await User.findById(req.params.id)
         user.alive = false
@@ -57,7 +57,24 @@ exports.heal = async (req, res) => {
     }
 };
 
-exports.activateAll = async (req, res) => {
+exports.activateOperation = async (req, res, next) => {
+    try {
+        const operation = await Operation.findById(req.params.id)
+        await Promise.all(operation.users.map(async userId => {
+            user = await User.findById(userId)
+            console.log('user :>> ', user);
+            user.active = true
+            user.alive = true
+            user.save()
+        }))
+        res.status(200).send(user)
+    } catch (err) {
+        console.error(err)
+        next(createError(503, err))
+    }
+}
+
+exports.activateAll = async (req, res, next) => {
     try {
         const resp = await User.updateMany({}, { $set: { active: true }}).exec();
         res.status(200).send(resp)
@@ -67,7 +84,7 @@ exports.activateAll = async (req, res) => {
     }
 };
 
-exports.killAll = async (req, res) => {
+exports.killAll = async (req, res, next) => {
     try {
         const resp = await User.updateMany({}, { $set: { alive: false }}).exec();
         res.status(200).send(resp)
@@ -77,7 +94,7 @@ exports.killAll = async (req, res) => {
     }
 };
 
-exports.healAll = async (req, res) => {
+exports.healAll = async (req, res, next) => {
     try {
         const resp = await User.updateMany({}, { $set: { alive: true }}).exec();
         res.status(200).send(resp)

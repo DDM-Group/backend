@@ -6,7 +6,10 @@ const {Operation} = db.models;
 exports.getAll = async (req, res, next) => {
     try {
         const operations = await Operation
-          .find({isVisible: true}).populate("users").exec()
+          .find({isVisible: true})
+          .populate("users")
+          .populate('manager')
+          .exec()
         res.send(operations)
     } catch (err) {
         console.error(err)

@@ -23,6 +23,14 @@ module.exports = function(mongoose) {
 
   require('./adminBro')(app, mongoose);
 
+  app.use(function(req, res, next) {
+    res.header(
+      "Access-Control-Allow-Headers",
+      "x-access-token, Origin, Content-Type, Accept"
+    );
+    next();
+  });
+
   require('./routes/image.routes')(app);
   require('./routes/auth.routes')(app);
   require('./routes/user.routes')(app);
