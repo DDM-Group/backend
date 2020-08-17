@@ -1,6 +1,7 @@
 const createError = require('http-errors');
 const  db = require('../models');
 const {ScoutingRequest} = db.models;
+const moment = require('moment')
 
 exports.getAll = (req, res, next) => {
     const {query, userLevel} = req;
@@ -12,7 +13,7 @@ exports.getAll = (req, res, next) => {
     }
     ScoutingRequest.find(body).exec()
         .then(data => {
-            res.send(filterScoutingRequestData(data, userLevel));
+            res.send(data);
         })
         .catch(err => {
             console.log('err :', err);
@@ -20,24 +21,32 @@ exports.getAll = (req, res, next) => {
         })
 }
 
-filterScoutingRequestData = (data, level) =>{
-    return data.map(item => filterScoutingRequestItem(item, level));
+exports.register = (req, res, next) => {
+    try {
+        const {requestObject, place, task} = req.body;
+        console.log(requestObject)
+        console.log(place)
+        console.log(task)
+        const scoutingRequest = new ScoutingRequest({
+            requestObject,
+            place,
+            task,
+            name: task, //TODO: change to username_number
+            requestedBy: req.userId,
+            startDate: moment(),
+            dueDate: moment().add(12, 'hours')
+        });
+        scoutingRequest.save((err, request) => {
+            if (err) {
+                console.log(err)
+                res.status(500).send({message: err});
+                return;
+            }
+            res.status(204).send({message: "Request was registered successfully!"});
+        })
+    } catch (e) {
+        console.log(e)
+        res.status(503).send(e)
+    }
 }
 
-filterScoutingRequestItem = (item, level) =>{
-    const sensitiveRegex = /\((d),([^)]+)\)/g;
-    const data = Object.fromEntries(Object.entries(item.data).map(([key, value]) =>{
-        const matches = [...value.matchAll(sensitiveRegex)];
-        console.log('matches :>> ', matches);
-        let text = value;
-        matches.forEach(item => {
-            text = text.replace(item[0], item[1] > level ? '' : item[2])
-        })
-        return[key, text];
-    }));
-    const response ={
-        ...item._doc,
-        data
-    }
-    return response;
-}
