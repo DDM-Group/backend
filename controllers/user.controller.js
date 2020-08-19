@@ -4,7 +4,7 @@ const { User, Role, Operation } = db.models;
 
 exports.qr = async (req, res, next) => {
     try {
-        const user = await User.findById(req.params.id)
+        const user = await User.findById(req.params.id).exec()
         if (!user.active) {
             user.active = true
             user.alive = true
@@ -23,7 +23,7 @@ exports.qr = async (req, res, next) => {
 
 exports.activate = async (req, res, next) => {
     try {
-        const user = await User.findById(req.params.id)
+        const user = await User.findById(req.params.id).exec()
         user.active = true
         user.save()
         res.status(200).send(user)
@@ -35,7 +35,8 @@ exports.activate = async (req, res, next) => {
 
 exports.kill = async (req, res, next) => {
     try {
-        const user = await User.findById(req.params.id)
+        const user = await User.findById(req.params.id).exec()
+        console.log('user :>> ', user);
         user.alive = false
         user.save()
         res.status(200).send(user)
@@ -59,7 +60,7 @@ exports.heal = async (req, res, next) => {
 
 exports.activateOperation = async (req, res, next) => {
     try {
-        const operation = await Operation.findById(req.params.id)
+        const operation = await Operation.findById(req.params.id).exec()
         await Promise.all(operation.users.map(async userId => {
             user = await User.findById(userId)
             console.log('user :>> ', user);

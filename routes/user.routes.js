@@ -7,9 +7,9 @@ module.exports = function(app) {
   app.get("/user/kill", [authJwt.verifyToken, authJwt.isAdmin], controller.killAll);
   app.get("/user/heal", [authJwt.verifyToken, authJwt.isAdmin], controller.healAll);
 
+  app.get("/user/:id/activate", [authJwt.verifyToken], controller.activate);
+  app.get("/user/:id/kill", [authJwt.verifyToken], controller.kill);
+  app.get("/user/:id/heal", [authJwt.verifyToken], controller.heal);
   app.get("/user/:id", controller.qr);
-  app.get("/user/:id/activate", [authJwt.verifyToken, authJwt.isAdmin], controller.activate);
-  app.get("/user/:id/kill", [authJwt.verifyToken, authJwt.isAdmin], controller.kill);
-  app.get("/user/:id/heal", [authJwt.verifyToken, authJwt.isAdmin], controller.heal);
 
 };
