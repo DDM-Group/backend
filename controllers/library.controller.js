@@ -4,6 +4,7 @@ const {Library} = db.models;
 
 exports.getAll = (req, res, next) => {
     const {query, userLevel} = req;
+    console.log(query)
     const body = query.type ? {
         type: query.type,
         isVisible: true

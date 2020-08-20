@@ -13,7 +13,7 @@ accessAll = (req, res, next) => {
     console.log('token :>> ', JSON.stringify(token));
     jwt.verify(token, JWT_SECRET, (err, decoded) => {
       if (err) {
-        return res.status(401).send({ message: "Unauthorized!" });
+       console.log(err)
       }
       req.userId = decoded.id;
       req.userLevel = decoded.level || 0;
