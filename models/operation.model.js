@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const _ = require('lodash')
 const { HOST, PORT } = process.env;
 const operationSchema = new mongoose.Schema({
   name: String,
@@ -35,5 +36,12 @@ const operationSchema = new mongoose.Schema({
   toJSON : {getters: true}
 });
 
+operationSchema.statics.getPointsForUser = async function(id) {
+  const userOps = await this.find({ 'points.user': { $eq: id }}).select('points').exec();
+  return userOps.reduce((exp, op) => {
+    const res = _.find(op.points, ['user', id])
+    return exp += res.points
+  }, 0)
+}
 const Operation = mongoose.model('Operation', operationSchema);
 module.exports = Operation;

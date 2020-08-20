@@ -67,7 +67,7 @@ exports.signin = (req, res) => {
     username: req.body.username
   })
     .populate("roles", "-__v")
-    .exec((err, user) => {
+    .exec(async (err, user) => {
       if (err) {
         res.status(500).send({ message: err });
         return;
@@ -92,6 +92,8 @@ exports.signin = (req, res) => {
         expiresIn: '1d' // 24 hours
       });
 
+      const exp = await user.calculateExperience()
+      const level = await user.calculateLevel()
       const authorities = user.roles.map(role => `ROLE_${role.name.toUpperCase()}`);
       res.status(200).send({
         id: user._id,
@@ -99,8 +101,8 @@ exports.signin = (req, res) => {
         name: user.name,
         group: user.group,
         photo: user.photo,
-        level: user.level,
-        experience: user.experience,
+        level,
+        experience: exp,
         lives: user.lives,
         roles: authorities,
         accessToken: token
@@ -111,7 +113,7 @@ exports.signin = (req, res) => {
 exports.autoupdate = (req, res) => {
   User.findById(req.userId)
   .populate("roles", "-__v")
-  .exec((err, user) => {
+  .exec(async (err, user) => {
     if (err) {
       res.status(500).send({ message: err });
       return;
@@ -119,6 +121,8 @@ exports.autoupdate = (req, res) => {
     if (!user) {
       return res.status(404).send({ message: "User Not found." });
     }
+    const exp = await user.calculateExperience()
+    const level = await user.calculateLevel()
     const authorities = user.roles.map(role => `ROLE_${role.name.toUpperCase()}`);
     res.status(200).send({
       id: user._id,
@@ -126,8 +130,8 @@ exports.autoupdate = (req, res) => {
       name: user.name,
       group: user.group,
       photo: user.photo,
-      level: user.level,
-      experience: user.experience,
+      level,
+      experience: exp,
       lives: user.lives,
       roles: authorities
     });
