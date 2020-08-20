@@ -30,9 +30,22 @@ exports.getById = async (req, res, next) => {
 
 exports.getForUser = async (req, res, next) => {
     try {
-        const operations = await Operation
-          .find({ users: { $elemMatch: { $eq: req.params.id }}}).populate("users").exec()
-        res.send(operations)
+        const {id} = req.params;
+        if (id !== 'undefined') {
+            const operations = await Operation
+              .find({
+                   'points.user': { $eq: id },
+                   users: { $elemMatch: { $eq: id }}
+                }).exec()
+            const ops = operations.map(op => {
+                const {name, all_points, points, success} = op.toObject()
+                const result = points.find(r =>  r.user == id).points
+                return { name, success, all_points, result }
+            })
+            res.send(ops)
+        } else {
+            next(createError(503, 'You are unauthorized!'))
+        }
     } catch (err) {
         console.error(err)
         next(createError(503, err))

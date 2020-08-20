@@ -37,23 +37,22 @@ filterLibraryData = (data, level) => {
     return data.map(item => filterLibraryItem(item, level));
 }
 
-filterLibraryItem = (item, level) => {
+filterLibraryItem = (data, level) => {
     console.log('level :>> ', level);
+    const item = data.toObject();
     console.log('item :>> ', item);
     const sensitiveRegexp = /\((\d),([^)]+)\)/g;
-    const data = Object.fromEntries(Object.entries(item.data).map(([key, value]) => {
+    const filteredItem = Object.fromEntries(Object.entries(item.data).map(([key, value]) => {
         const matches = [...value.matchAll(sensitiveRegexp)];
-        console.log('matches :>> ', matches);
         let text = value;
         matches.forEach(item => {
             text = text.replace(item[0], item[1] > level ? '' : item[2])
         })
         return [key, text];
     }));
-    console.log('data :>> ', data);
     const response = {
-        ...item._doc,
-        data
+        ...item,
+        data: filteredItem
     }
     return response;
 }

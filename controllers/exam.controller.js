@@ -4,13 +4,19 @@ const {Exam} = db.models;
 
 exports.getForUser = async (req, res, next) => {
     try {
-        const operations = await Exam
-          .find({ students: { $elemMatch: { $eq: req.params.id }}}).populate("users").exec()
-        const ops = operations.map(op => {
-            const {students, ...res} = {...op._doc}
-            return res
-        })
-        res.send(ops)
+        const {id} = req.params;
+        if (id !== 'undefined') {
+            const exams = await Exam
+              .find({ 'results.user': { $eq: id }}).exec()
+            const exs = exams.map(ex => {
+                const {name, results} = ex.toObject()
+                const result = results.find(r =>  r.user == id)
+                return { name, result }
+            })
+            res.send(exs)
+        } else {
+            next(createError(503, 'You are unauthorized!'))
+        }
     } catch (err) {
         console.error(err)
         next(createError(503, err))

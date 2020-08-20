@@ -1,7 +1,11 @@
 const mongoose = require('mongoose');
+const { HOST, PORT } = process.env;
 const operationSchema = new mongoose.Schema({
   name: String,
-  photo: String,
+  photo: {
+    type: String,
+    get: v => v && `http://${HOST}:${PORT}/images/${v}`
+  },
   data: Object,
   level: Number,
   isVisible: Boolean,
@@ -19,10 +23,16 @@ const operationSchema = new mongoose.Schema({
   ],
   success: Boolean,
   all_points: Number,
-  points: {
-    type: Map,
-    of: Number
-  }
+  points: [{
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User"
+    },
+    points: Number
+  }]
+},{
+  toObject : {getters: true},
+  toJSON : {getters: true}
 });
 
 const Operation = mongoose.model('Operation', operationSchema);

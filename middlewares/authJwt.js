@@ -11,14 +11,18 @@ accessAll = (req, res, next) => {
     next();
   } else {
     console.log('token :>> ', JSON.stringify(token));
-    jwt.verify(token, JWT_SECRET, (err, decoded) => {
-      if (err) {
-       console.log(err)
-      }
-      req.userId = decoded.id;
-      req.userLevel = decoded.level || 0;
-      next();
-    });
+    try {
+      jwt.verify(token, JWT_SECRET, (err, decoded={}) => {
+        if (err) {
+         console.error(err)
+        }
+        req.userId = decoded.id || 'unauthorized';
+        req.userLevel = decoded.level || 0;
+        next();
+      });
+    } catch (err) {
+      console.error(err)
+    }
   }
 }
 

@@ -11,6 +11,16 @@ const examSchema = new mongoose.Schema({
       type: mongoose.Schema.Types.ObjectId,
       ref: "User"
     }
+  ],
+  results: [
+    {
+      user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User"
+      },
+      success: Boolean,
+      points: Number
+    }
   ]
 });
 

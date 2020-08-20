@@ -1,11 +1,15 @@
 const mongoose = require("mongoose");
+const { HOST, PORT } = process.env;
 
 const User = mongoose.model(
   "User",
   new mongoose.Schema({
     username: String,
     password: String,
-    photo: String,
+    photo: {
+      type: String,
+      get: v => v && `http://${HOST}:${PORT}/images/${v}`
+    },
     isVisible: Boolean,
     name: String,
     group: String,
@@ -21,6 +25,9 @@ const User = mongoose.model(
         ref: "Role"
       }
     ]
+  },{
+    toObject : {getters: true},
+    toJSON : {getters: true}
   })
 );
 
