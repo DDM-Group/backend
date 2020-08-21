@@ -28,7 +28,7 @@ examSchema.statics.getPointsForUser = async function(id) {
   const userExams = await this.find({ 'results.user': { $eq: id }}).select('results').exec();
   return userExams.reduce((exp, ex) => {
     const res = _.find(ex.results, ['user', id])
-    return exp += res.points
+    return exp += (res.points || 0)
   }, 0)
 }
 
