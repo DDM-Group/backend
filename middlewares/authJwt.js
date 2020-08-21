@@ -21,7 +21,7 @@ accessAll = (req, res, next) => {
         next();
       });
     } catch (err) {
-      console.error(err)
+      console.error('ERROR in AccessAll middleware')
     }
   }
 }
