@@ -38,9 +38,7 @@ filterLibraryData = (data, level) => {
 }
 
 filterLibraryItem = (data, level) => {
-    console.log('level :>> ', level);
     const item = data.toObject();
-    console.log('item :>> ', item);
     const sensitiveRegexp = /\((\d),([^)]+)\)/g;
     const filteredItem = Object.fromEntries(Object.entries(item.data).map(([key, value]) => {
         const matches = [...value.matchAll(sensitiveRegexp)];
