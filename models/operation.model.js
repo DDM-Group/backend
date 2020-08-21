@@ -40,7 +40,7 @@ operationSchema.statics.getPointsForUser = async function(id) {
   const userOps = await this.find({ 'points.user': { $eq: id }}).select('points').exec();
   return userOps.reduce((exp, op) => {
     const res = _.find(op.points, ['user', id])
-    return exp += res.points
+    return exp += (res.points || 0)
   }, 0)
 }
 const Operation = mongoose.model('Operation', operationSchema);
