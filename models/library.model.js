@@ -7,7 +7,8 @@ const librarySchema = new mongoose.Schema({
   type: String,
   photo: {
     type: String,
-    get: v => v && `http://${HOST}:${PORT}/images/${v}`
+    get: v => v && `http://${HOST}:${PORT}/images/${v}`,
+    set: v => v.replace(`http://${HOST}:${PORT}/images/`, '')
   },
   isVisible: Boolean,
   data: Object,
