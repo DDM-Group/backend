@@ -1,7 +1,7 @@
 const createError = require('http-errors');
 const moment = require('moment');
 const db = require('../models');
-const {Operation} = db.models;
+const {Operation, User} = db.models;
 
 exports.getAll = async (req, res, next) => {
     try {
@@ -10,7 +10,9 @@ exports.getAll = async (req, res, next) => {
           .populate("users")
           .populate('manager')
           .exec()
-        res.send(operations)
+        let user = await User.findById(req.userId).exec()
+        user = user.toObject()
+        res.send(operations.filter(op => op.level <= user.level))
     } catch (err) {
         console.error(err)
         next(createError(503, err))
@@ -57,6 +59,11 @@ exports.register = async (req, res, next) => {
         const operation = await Operation.findById(req.params.id).populate("users").exec()
         if (operation.users.findIndex(user => user.id === req.userId) !== -1) {
             return res.status(409).send({ message: "Пользователь уже записан" });
+        }
+        let user = await User.findById(req.userId).exec()
+        user = user.toObject()
+        if (operation.level > user.level) {
+            return res.status(409).send({ message: "У вас недостаточный уровень для этой высадки" });
         }
         const result = await (await Operation.findByIdAndUpdate(req.params.id, { $push: { users: req.userId}}, {new: true}))
         return res.status(201).send(result);

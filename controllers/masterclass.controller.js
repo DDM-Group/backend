@@ -79,3 +79,13 @@ exports.register = async (req, res, next) => {
         next(createError(503, err))
     }
 }
+
+exports.unregister = async (req, res, next) => {
+    try {
+        const result = await MasterClass.findByIdAndUpdate(req.params.id, { $push: { students: req.userId}}, {new: true})
+        return res.status(201).send(result);
+    } catch (err)  {
+        console.log('err :', err);
+        next(createError(503, err))
+    }
+}

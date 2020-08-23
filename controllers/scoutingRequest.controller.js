@@ -7,9 +7,11 @@ exports.getAll = (req, res, next) => {
     const {query, userLevel} = req;
     const body = query.type ? {
         type: query.type,
-        isVisible: true
+        isVisible: true,
+        requestedBy: req.userId
     } : {
-        isVisible: true
+        isVisible: true,
+        requestedBy: req.userId
     }
     ScoutingRequest.find(body).exec()
         .then(data => {
@@ -34,7 +36,8 @@ exports.register = (req, res, next) => {
             name: task, //TODO: change to username_number
             requestedBy: req.userId,
             startDate: moment(),
-            dueDate: moment().add(12, 'hours')
+            dueDate: moment().add(12, 'hours'),
+            isVisible: true
         });
         scoutingRequest.save((err, request) => {
             if (err) {
