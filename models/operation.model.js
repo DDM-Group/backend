@@ -11,6 +11,7 @@ const operationSchema = new mongoose.Schema({
   data: Object,
   level: Number,
   isVisible: Boolean,
+  panic: Number,
   date: Date,
   manager: {
     type: mongoose.Schema.Types.ObjectId,
