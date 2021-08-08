@@ -21,8 +21,8 @@ exports.getAll = async (req, res, next) => {
 
 exports.getById = async (req, res, next) => {
     try {
-        const operation = Operation.findById(req.params.id)
-          .populate("users").exec()
+        const operation = await Operation.findById(req.params.id)
+          .populate("users").lean()
           res.send(operation)
     } catch (err) {
         console.error(err);
